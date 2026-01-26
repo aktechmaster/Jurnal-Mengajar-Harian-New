@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Mengajar SMPIT Al-Kautsar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --accent: #0284c7;
+            --accent-hover: #0369a1;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --input-bg: #f8fafc;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; display: flex; justify-content: center; padding: 20px 10px; }
+        .container { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 80px; }
+        
+        .header { background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%); padding: 25px; text-align: center; color: white; }
+        .header h2 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+        .header p { margin: 5px 0 0; opacity: 0.9; font-size: 0.9rem; }
+
+        .form-area { padding: 20px; }
+        
+        /* Input Styles */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        
+        .form-control {
+            width: 100%; padding: 12px 12px 12px 40px; border: 1px solid var(--border); border-radius: 8px;
+            background: var(--input-bg); font-size: 0.95rem; outline: none; box-sizing: border-box; transition: 0.2s;
+        }
+        .form-control:focus { border-color: var(--accent); background: #fff; }
+        
+        /* Checkbox Grid for Jam Ke */
+        .checkbox-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 5px; }
+        .cb-item { position: relative; }
+        .cb-item input { display: none; }
+        .cb-item label { 
+            display: block; text-align: center; padding: 8px; background: var(--input-bg); border: 1px solid var(--border);
+            border-radius: 6px; font-size: 0.8rem; cursor: pointer; transition: 0.2s;
+        }
+        .cb-item input:checked + label { background: var(--accent); color: white; border-color: var(--accent); }
+
+        /* Student List Area */
+        .student-section { margin-top: 25px; border-top: 2px dashed var(--border); padding-top: 20px; }
+        .section-title { font-size: 1rem; font-weight: 700; color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        
+        .student-card { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: #fff; border: 1px solid var(--border); padding: 10px 15px; 
+            border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .student-name { font-weight: 600; font-size: 0.9rem; }
+        .attendance-opt { width: 100px; padding: 5px; border-radius: 5px; border: 1px solid var(--border); font-size: 0.85rem; }
+
+        /* Floating Button */
+        .bottom-action {
+            position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05); display: flex; justify-content: center; z-index: 100;
+        }
+        .btn-submit {
+            width: 100%; max-width: 500px; padding: 14px; background: var(--accent); color: white;
+            border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.2s;
+        }
+        .btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
+
+        .loader { display: none; text-align: center; padding: 20px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>JURNAL MENGAJAR</h2>
+        <p>SMP IT Al-Kautsar</p>
+    </div>
+
+    <form id="jurnalForm" class="form-area" onsubmit="handleFormSubmit(event)">
+        
+        <div class="input-group">
+            <label>Nama Guru</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-user-tie"></i>
+                <select id="guru" name="guru" class="form-control" required>
+                    <option value="">Loading...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Mata Pelajaran</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-book"></i>
+                <select id="mapel" name="mapel" class="form-control" required>
+                    <option value="">Loading...</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Pilih Kelas</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-school-flag"></i>
+                <select id="kelas" name="kelas" class="form-control" onchange="loadSiswa()" required>
+                    <option value="">Loading...</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <div class="input-group" style="flex: 1;">
+                <label>Pertemuan Ke-</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-hashtag"></i>
+                    <input type="number" name="pertemuan" class="form-control" placeholder="1" required>
+                </div>
+            </div>
+            <div class="input-group" style="flex: 1;">
+                <label>Media</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-laptop"></i>
+                    <select name="media" class="form-control">
+                        <option>LCD Proyektor</option>
+                        <option>Papan Tulis</option>
+                        <option>Alat Peraga</option>
+                        <option>Lembar Kerja</option>
+                        <option>Lainnya</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Materi Pembelajaran</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <input type="text" name="materi" class="form-control" placeholder="Judul materi..." required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Kegiatan Pembelajaran</label>
+            <textarea name="kegiatan" class="form-control" rows="3" placeholder="Deskripsi singkat kegiatan..." style="padding-left: 12px;"></textarea>
+        </div>
+
+        <div class="input-group">
+            <label>Jam Ke- (Bisa pilih lebih dari satu)</label>
+            <div class="checkbox-grid">
+                <div class="cb-item"><input type="checkbox" name="waktu" value="1" id="j1"><label for="j1">1</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="2" id="j2"><label for="j2">2</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="3" id="j3"><label for="j3">3</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="4" id="j4"><label for="j4">4</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="5" id="j5"><label for="j5">5</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="6" id="j6"><label for="j6">6</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="7" id="j7"><label for="j7">7</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="8" id="j8"><label for="j8">8</label></div>
+                <div class="cb-item"><input type="checkbox" name="waktu" value="9" id="j9"><label for="j9">9</label></div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Bukti KBM (Foto)</label>
+            <input type="file" id="buktiKBM" class="form-control" style="padding-left: 12px;" accept="image/*" required>
+        </div>
+        
+        <div class="input-group">
+            <label>Catatan Tambahan</label>
+            <input type="text" name="catatan" class="form-control" placeholder="Opsional..." style="padding-left: 12px;">
+        </div>
+
+        <div class="student-section">
+            <div class="section-title"><i class="fa-solid fa-users-viewfinder"></i> Presensi Siswa</div>
+            <div id="student-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Mengambil data siswa...</div>
+            <div id="student-list">
+                <p style="text-align: center; color: #999; font-size: 0.9rem;">Pilih kelas untuk memunculkan siswa.</p>
+            </div>
+        </div>
+
+        <div style="height: 40px;"></div>
+        
+        <div class="bottom-action">
+            <button type="submit" id="btnSubmit" class="btn-submit">
+                <i class="fa-solid fa-paper-plane"></i> KIRIM JURNAL
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // 1. SAAT LOAD: AMBIL DATA DROPDOWN
+    window.onload = function() {
+        google.script.run.withSuccessHandler(populateDropdowns).getDatabaseData();
+    };
+
+    function populateDropdowns(data) {
+        fillSelect('guru', data.gurus, '-- Pilih Guru --');
+        fillSelect('mapel', data.mapels, '-- Pilih Mapel --');
+        fillSelect('kelas', data.kelas, '-- Pilih Kelas --');
+    }
+
+    function fillSelect(id, items, defaultText) {
+        const select = document.getElementById(id);
+        select.innerHTML = `<option value="" disabled selected>${defaultText}</option>`;
+        items.forEach(item => {
+            let opt = document.createElement('option');
+            opt.value = item;
+            opt.innerText = item;
+            select.appendChild(opt);
+        });
+    }
+
+    // 2. SAAT KELAS DIPILIH: LOAD SISWA
+    function loadSiswa() {
+        const kelas = document.getElementById('kelas').value;
+        const listDiv = document.getElementById('student-list');
+        const loader = document.getElementById('student-loader');
+        
+        listDiv.innerHTML = '';
+        loader.style.display = 'block';
+
+        google.script.run.withSuccessHandler(renderSiswa).getSiswaByKelas(kelas);
+    }
+
+    function renderSiswa(siswaList) {
+        const listDiv = document.getElementById('student-list');
+        document.getElementById('student-loader').style.display = 'none';
+
+        if (siswaList.length === 0) {
+            listDiv.innerHTML = '<p style="text-align:center; color:red">Belum ada data siswa di kelas ini.</p>';
+            return;
+        }
+
+        let html = '';
+        siswaList.forEach((nama, i) => {
+            html += `
+            <div class="student-card">
+                <div class="student-name">${nama}</div>
+                <select class="attendance-opt" data-nama="${nama}">
+                    <option value="Hadir">✅ Hadir</option>
+                    <option value="Sakit">🤒 Sakit</option>
+                    <option value="Izin">📩 Izin</option>
+                    <option value="Alpha">❌ Alpha</option>
+                </select>
+            </div>`;
+        });
+        listDiv.innerHTML = html;
+    }
+
+    // 3. SAAT SUBMIT FORM
+    function handleFormSubmit(e) {
+        e.preventDefault();
+        
+        if(!confirm("Pastikan data sudah benar. Kirim Jurnal?")) return;
+
+        const btn = document.getElementById('btnSubmit');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> MENGIRIM...';
+        btn.disabled = true;
+
+        const form = document.getElementById('jurnalForm');
+        const formData = new FormData(form);
+        const formObj = Object.fromEntries(formData.entries());
+
+        // Handle Checkbox Jam Ke (Multiple values)
+        const checkboxes = document.querySelectorAll('input[name="waktu"]:checked');
+        let waktuArr = [];
+        checkboxes.forEach((cb) => { waktuArr.push(cb.value); });
+        formObj.waktu = waktuArr;
+
+        // Handle Absensi Data
+        const attendanceSelects = document.querySelectorAll('.attendance-opt');
+        let absensiData = [];
+        attendanceSelects.forEach(sel => {
+            absensiData.push({
+                nama: sel.getAttribute('data-nama'),
+                status: sel.value
+            });
+        });
+        formObj.absensiData = JSON.stringify(absensiData);
+
+        // Handle File Upload & Send to Server
+        const fileInput = document.getElementById('buktiKBM');
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e) {
+                const rawLog = reader.result.split(',')[1];
+                formObj.fileData = rawLog;
+                formObj.fileName = file.name;
+                formObj.mimeType = file.type;
+                
+                sendData(formObj, btn, originalText);
+            };
+        } else {
+            alert("Harap upload Bukti KBM");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    function sendData(obj, btn, btnText) {
+        google.script.run.withSuccessHandler((res) => {
+            if (res.status === 'success') {
+                alert("✅ " + res.message);
+                document.getElementById('jurnalForm').reset();
+                document.getElementById('student-list').innerHTML = '<p style="text-align: center; color: #999; font-size: 0.9rem;">Pilih kelas untuk memunculkan siswa.</p>';
+            } else {
+                alert("❌ Gagal: " + res.message);
+            }
+            btn.innerHTML = btnText;
+            btn.disabled = false;
+        }).processForm(obj);
+    }
+</script>
+
+</body>
+</html>
