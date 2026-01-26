@@ -164,6 +164,19 @@
             gap: 10px;
         }
 
+        /* Grid khusus untuk Media agar muat 2 kolom */
+.media-grid {
+    grid-template-columns: repeat(2, 1fr) !important; /* Paksa 2 kolom */
+    gap: 8px;
+}
+
+/* Ukuran font tombol media agar pas */
+.media-grid .cb-item label {
+    font-size: 0.8rem;
+    padding: 8px 5px;
+    white-space: nowrap; /* Teks tidak turun baris */
+}
+
         .cb-item input { display: none; }
         
         .cb-item label {
@@ -298,22 +311,44 @@
             <select id="kelas" class="form-control" required onchange="loadSiswa()"><option>Select Class...</option></select>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="input-group">
-                <label>Meeting No.</label>
-                <input type="number" id="pertemuan" class="form-control" placeholder="1" required>
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; align-items: start;">
+    
+    <div class="input-group">
+        <label>Meeting No.</label>
+        <input type="number" id="pertemuan" class="form-control" placeholder="1" required>
+    </div>
+
+    <div class="input-group">
+        <label>Tools / Media (Multi-Select)</label>
+        <div class="checkbox-grid media-grid">
+            <div class="cb-item">
+                <input type="checkbox" name="media_alat" value="LCD Proyektor" id="m1">
+                <label for="m1">📽 LCD</label>
             </div>
-            <div class="input-group">
-                <label>Tools / Media</label>
-                <select id="media" class="form-control">
-                    <option>LCD Proyektor</option>
-                    <option>Smart TV</option>
-                    <option>Whiteboard</option>
-                    <option>Laboratorium</option>
-                    <option>Lainnya</option>
-                </select>
+            <div class="cb-item">
+                <input type="checkbox" name="media_alat" value="Speaker" id="m2">
+                <label for="m2">🔊 Speaker</label>
+            </div>
+            <div class="cb-item">
+                <input type="checkbox" name="media_alat" value="Smart TV" id="m3">
+                <label for="m3">📺 Smart TV</label>
+            </div>
+            <div class="cb-item">
+                <input type="checkbox" name="media_alat" value="Whiteboard" id="m4">
+                <label for="m4">📝 Board</label>
+            </div>
+            <div class="cb-item">
+                <input type="checkbox" name="media_alat" value="Laboratorium" id="m5">
+                <label for="m5">🧪 Lab</label>
+            </div>
+            <div class="cb-item">
+                <input type="checkbox" name="media_alat" value="Lainnya" id="m6">
+                <label for="m6">✨ Lainnya</label>
             </div>
         </div>
+    </div>
+
+</div>
 
         <div class="input-group">
             <label>Learning Topic</label>
@@ -440,7 +475,9 @@
             mapel: document.getElementById('mapel').value,
             kelas: document.getElementById('kelas').value,
             pertemuan: document.getElementById('pertemuan').value,
-            media: document.getElementById('media').value,
+            // Mengambil semua media yang dicentang lalu digabung koma
+media: Array.from(document.querySelectorAll('input[name="media_alat"]:checked'))
+       .map(cb => cb.value).join(", ") || "-",
             materi: document.getElementById('materi').value,
             kegiatan: document.getElementById('kegiatan').value,
             catatan: document.getElementById('catatan').value,
