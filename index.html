@@ -3,89 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jurnal Mengajar SMPIT Al-Kautsar</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>SIAKAD | Jurnal Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* SAMA SEPERTI YANG LAMA, TAPI SAYA RAPIKAN UNTUK GITHUB */
-        :root { --bg-color: #f0f2f5; --card-bg: #ffffff; --accent: #0284c7; --text-main: #334155; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-main); padding: 20px 10px; display: flex; justify-content: center; }
-        .container { background: var(--card-bg); width: 100%; max-width: 600px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 80px; }
-        .header { background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%); padding: 25px; text-align: center; color: white; }
-        .header h2 { margin: 0; }
-        .form-area { padding: 20px; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #64748b; }
-        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; }
-        .checkbox-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .cb-item label { display: block; text-align: center; padding: 8px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
-        .cb-item input:checked + label { background: var(--accent); color: white; }
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --bg-dark: #0f172a;
+            --glass: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text: #e2e8f0;
+            --input-bg: rgba(15, 23, 42, 0.6);
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        /* --- TAMBAHAN CSS UNTUK LOGO --- */
+        .header-logo {
+            width: 120px; /* Atur ukuran logo di sini */
+            height: auto;
+            margin-bottom: 15px;
+            /* Efek glowing halus agar menyatu dengan tema */
+            filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.3));
+        }
+
+        .header h2 {
+            font-size: 2rem;
+            margin: 0;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- INPUT STYLING --- */
+        .input-group { margin-bottom: 20px; position: relative; }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            transform: translateY(-2px);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300f2fe' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 18px;
+        }
+
+        /* --- CHECKBOX GRID --- */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
         .cb-item input { display: none; }
-        .student-card { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid var(--border); padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        .btn-submit { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-submit:disabled { background: #ccc; }
+        
+        .cb-item label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #94a3b8;
+            font-weight: bold;
+        }
+
+        .cb-item input:checked + label {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: #000;
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        /* --- STUDENT LIST --- */
+        .student-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid var(--glass-border);
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        
+        .student-card:hover {
+            background: rgba(255,255,255,0.08);
+            border-left-color: var(--primary);
+        }
+
+        .absen-select {
+            background: #0f172a;
+            color: white;
+            border: 1px solid #334155;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* --- BUTTON --- */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            color: #0f172a;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.5);
+        }
+
+        .btn-submit:disabled {
+            background: #334155;
+            color: #64748b;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* --- LOADING --- */
+        .loader {
+            width: 20px; height: 20px;
+            border: 3px solid #FFF;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Icon Wrapper untuk Email */
+        .input-wrapper { position: relative; }
+        .input-wrapper i {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+            color: var(--primary); z-index: 2;
+        }
+        .input-wrapper input { padding-left: 45px; }
+
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h2>JURNAL MENGAJAR</h2>
-        <p>SMP IT Al-Kautsar</p>
+        <img src="logosmpit.png" alt="Logo SMPIT" class="header-logo">
+        
+        <h2>TEACHING JOURNAL</h2>
+        <p>Sistem Informasi Akademik v2.0</p>
     </div>
 
-    <form id="jurnalForm" class="form-area">
-
-        <div class="input-group">
-    <label>Email (Untuk kirim bukti PDF)</label>
-    <div class="input-wrapper">
-        <i class="fa-solid fa-envelope" style="position: absolute; left: 12px; top: 40px; color: #64748b;"></i>
-        <input type="email" id="emailGuru" class="form-control" placeholder="contoh@sekolah.sch.id" style="padding-left: 40px;" required>
-    </div>
-    <small style="color: #64748b; font-size: 0.8rem;">*Pastikan email aktif</small>
-</div>
+    <form id="jurnalForm">
         
         <div class="input-group">
-            <label>Nama Guru</label>
-            <select id="guru" class="form-control" required><option>Loading...</option></select>
-        </div>
-
-        <div class="input-group">
-            <label>Mata Pelajaran</label>
-            <select id="mapel" class="form-control" required><option>Loading...</option></select>
-        </div>
-
-        <div class="input-group">
-            <label>Pilih Kelas</label>
-            <select id="kelas" class="form-control" required onchange="loadSiswa()"><option>Loading...</option></select>
-        </div>
-
-        <div style="display: flex; gap: 10px;">
-            <div class="input-group" style="flex:1">
-                <label>Pertemuan Ke</label>
-                <input type="number" id="pertemuan" class="form-control" required>
+            <label>Email Report</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-paper-plane"></i>
+                <input type="email" id="emailGuru" class="form-control" placeholder="email@sekolah.sch.id" required>
             </div>
-            <div class="input-group" style="flex:1">
-                <label>Media</label>
+        </div>
+
+        <div class="input-group">
+            <label>Guru Pengampu</label>
+            <select id="guru" class="form-control" required><option>Initialize System...</option></select>
+        </div>
+
+        <div class="input-group">
+            <label>Subject / Mapel</label>
+            <select id="mapel" class="form-control" required><option>Loading Data...</option></select>
+        </div>
+
+        <div class="input-group">
+            <label>Target Class</label>
+            <select id="kelas" class="form-control" required onchange="loadSiswa()"><option>Select Class...</option></select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="input-group">
+                <label>Meeting No.</label>
+                <input type="number" id="pertemuan" class="form-control" placeholder="1" required>
+            </div>
+            <div class="input-group">
+                <label>Tools / Media</label>
                 <select id="media" class="form-control">
-                    <option>LCD Proyektor</option><option>Papan Tulis</option><option>Lainnya</option>
+                    <option>LCD Proyektor</option>
+                    <option>Smart TV</option>
+                    <option>Whiteboard</option>
+                    <option>Laboratorium</option>
                 </select>
             </div>
         </div>
 
         <div class="input-group">
-            <label>Materi</label>
-            <input type="text" id="materi" class="form-control" required>
+            <label>Learning Topic</label>
+            <input type="text" id="materi" class="form-control" placeholder="Materi hari ini..." required>
         </div>
 
         <div class="input-group">
-            <label>Kegiatan</label>
-            <textarea id="kegiatan" class="form-control" rows="3"></textarea>
+            <label>Activity Log</label>
+            <textarea id="kegiatan" class="form-control" rows="3" placeholder="Deskripsi singkat kegiatan..."></textarea>
         </div>
 
         <div class="input-group">
-            <label>Jam Ke</label>
+            <label>Teaching Hours</label>
             <div class="checkbox-grid">
                 <script>
                     for(let i=1; i<=10; i++){
@@ -96,32 +307,40 @@
         </div>
 
         <div class="input-group">
-            <label>Bukti KBM (Foto)</label>
-            <input type="file" id="buktiKBM" class="form-control" accept="image/*" required>
+            <label>Evidence (Photo)</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-camera"></i>
+                <input type="file" id="buktiKBM" class="form-control" accept="image/*" required style="padding-top:12px">
+            </div>
         </div>
 
         <div class="input-group">
-            <label>Catatan</label>
-            <input type="text" id="catatan" class="form-control">
+            <label>Note</label>
+            <input type="text" id="catatan" class="form-control" placeholder="-">
         </div>
 
-        <div style="margin-top: 20px; border-top: 2px dashed #eee; padding-top: 20px;">
-            <h4 style="margin: 0 0 15px 0; color: var(--accent)">Presensi Siswa</h4>
-            <div id="loading-siswa" style="display:none; text-align:center;">Mengambil data...</div>
-            <div id="student-list" style="text-align: center; color: #999;">Pilih kelas dulu</div>
+        <div style="margin-top: 30px; border-top: 1px solid var(--glass-border); padding-top: 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <label style="margin:0; font-size:1rem; color:var(--primary);">ATTENDANCE</label>
+                <div id="loading-siswa" style="display:none; color: var(--secondary); font-size:0.8rem;">
+                    <span class="loader"></span> Syncing...
+                </div>
+            </div>
+            <div id="student-list" style="text-align: center; color: #64748b; font-style: italic;">
+                [ Waiting for Class Selection ]
+            </div>
         </div>
 
-        <br>
-        <button type="button" class="btn-submit" onclick="kirimData()" id="btnKirim">KIRIM JURNAL</button>
+        <button type="button" class="btn-submit" onclick="kirimData()" id="btnKirim">UPLOAD DATA <i class="fa-solid fa-rocket"></i></button>
 
     </form>
 </div>
 
 <script>
-    // --- GANTI URL DI BAWAH INI DENGAN URL DEPLOY ANDA ---
+    // --- GANTI URL DI BAWAH INI DENGAN URL DEPLOY ANDA YANG BARU ---
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG4ZKJCOxEmjU12FaVpQ6szU9xvXJnAj4tNy4lpSlsq6FbMwo8doFme-UG-38V8x6D/exec"; 
 
-    // 1. Load Data Awal (Guru/Mapel) saat web dibuka
+    // 1. Load Data Awal
     window.onload = function() {
         fetch(SCRIPT_URL + "?action=getMeta")
         .then(res => res.json())
@@ -129,12 +348,13 @@
             isiSelect('guru', data.gurus);
             isiSelect('mapel', data.mapels);
             isiSelect('kelas', data.kelas);
-        });
+        })
+        .catch(err => console.log(err));
     };
 
     function isiSelect(id, array) {
         let el = document.getElementById(id);
-        el.innerHTML = `<option value="" disabled selected>-- Pilih --</option>`;
+        el.innerHTML = `<option value="" disabled selected>-- Select --</option>`;
         array.forEach(item => {
             let opt = document.createElement('option');
             opt.value = item;
@@ -143,10 +363,10 @@
         });
     }
 
-    // 2. Load Siswa saat pilih Kelas
+    // 2. Load Siswa
     function loadSiswa() {
         let kls = document.getElementById('kelas').value;
-        document.getElementById('loading-siswa').style.display = 'block';
+        document.getElementById('loading-siswa').style.display = 'inline-block';
         document.getElementById('student-list').innerHTML = '';
 
         fetch(SCRIPT_URL + "?action=getSiswa&kelas=" + kls)
@@ -157,8 +377,8 @@
             siswa.forEach(nama => {
                 html += `
                 <div class="student-card">
-                    <span style="font-weight:600; font-size:14px">${nama}</span>
-                    <select class="absen-select" data-nama="${nama}" style="padding:5px;">
+                    <span style="font-weight:500; font-size:0.95rem; color:#e2e8f0;">${nama}</span>
+                    <select class="absen-select" data-nama="${nama}">
                         <option value="Hadir">✅ H</option>
                         <option value="Sakit">🤒 S</option>
                         <option value="Izin">📩 I</option>
@@ -172,22 +392,17 @@
 
     // 3. Kirim Data
     function kirimData() {
-        // Validasi Email Wajib Diisi
         const emailVal = document.getElementById('emailGuru').value;
-        if(!emailVal) {
-            alert("Mohon isi Email terlebih dahulu!");
-            return;
-        }
+        if(!emailVal) { alert("Email is required for System Validation!"); return; }
 
-        if(!confirm('Kirim Data Jurnal?')) return;
+        if(!confirm('Confirm Upload Data?')) return;
 
         let btn = document.getElementById('btnKirim');
-        btn.innerHTML = 'MENGIRIM...';
+        btn.innerHTML = '<span class="loader"></span> PROCESSING...';
         btn.disabled = true;
 
-        // Ambil Nilai Form Manual
         let data = {
-            email: emailVal, // <--- INI BAGIAN PENTINGNYA (Kirim email ke Google)
+            email: emailVal,
             guru: document.getElementById('guru').value,
             mapel: document.getElementById('mapel').value,
             kelas: document.getElementById('kelas').value,
@@ -200,17 +415,11 @@
             absensiData: []
         };
 
-        // ... (Kode selanjutnya SAMA persis, tidak perlu diubah) ...
-        
-        // Ambil Checkbox Waktu
         document.querySelectorAll('input[name="waktu"]:checked').forEach(cb => data.waktu.push(cb.value));
-
-        // Ambil Absensi
         document.querySelectorAll('.absen-select').forEach(sel => {
             data.absensiData.push({ nama: sel.getAttribute('data-nama'), status: sel.value });
         });
 
-        // Proses File & Kirim
         let fileInput = document.getElementById('buktiKBM');
         if(fileInput.files.length > 0) {
             let reader = new FileReader();
@@ -219,12 +428,11 @@
                 data.fileData = reader.result.split(',')[1];
                 data.fileName = fileInput.files[0].name;
                 data.mimeType = fileInput.files[0].type;
-                
                 kirimKeGoogle(data, btn);
             }
         } else {
-            alert("Wajib upload foto!");
-            btn.innerHTML = "KIRIM JURNAL";
+            alert("Evidence Photo Required!");
+            btn.innerHTML = "UPLOAD DATA 🚀";
             btn.disabled = false;
         }
     }
@@ -237,16 +445,16 @@
         .then(res => res.json())
         .then(response => {
             if(response.status == 'success') {
-                alert("✅ Berhasil Tersimpan!");
+                alert("✅ SYSTEM SUCCESS: Data Encrypted & Stored!");
                 location.reload();
             } else {
-                alert("❌ Gagal: " + response.message);
+                alert("❌ SYSTEM FAILURE: " + response.message);
             }
-            btn.innerHTML = "KIRIM JURNAL";
+            btn.innerHTML = "UPLOAD DATA 🚀";
             btn.disabled = false;
         })
         .catch(err => {
-            alert("Error Jaringan/CORS. Cek Console.");
+            alert("CONNECTION LOST. Check Console.");
             console.log(err);
             btn.disabled = false;
         });
