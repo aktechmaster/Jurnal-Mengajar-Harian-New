@@ -36,6 +36,15 @@
     </div>
 
     <form id="jurnalForm" class="form-area">
+
+        <div class="input-group">
+    <label>Email (Untuk kirim bukti PDF)</label>
+    <div class="input-wrapper">
+        <i class="fa-solid fa-envelope" style="position: absolute; left: 12px; top: 40px; color: #64748b;"></i>
+        <input type="email" id="emailGuru" class="form-control" placeholder="contoh@sekolah.sch.id" style="padding-left: 40px;" required>
+    </div>
+    <small style="color: #64748b; font-size: 0.8rem;">*Pastikan email aktif</small>
+</div>
         
         <div class="input-group">
             <label>Nama Guru</label>
@@ -163,7 +172,14 @@
 
     // 3. Kirim Data
     function kirimData() {
-        if(!confirm('Kirim Data?')) return;
+        // Validasi Email Wajib Diisi
+        const emailVal = document.getElementById('emailGuru').value;
+        if(!emailVal) {
+            alert("Mohon isi Email terlebih dahulu!");
+            return;
+        }
+
+        if(!confirm('Kirim Data Jurnal?')) return;
 
         let btn = document.getElementById('btnKirim');
         btn.innerHTML = 'MENGIRIM...';
@@ -171,6 +187,7 @@
 
         // Ambil Nilai Form Manual
         let data = {
+            email: emailVal, // <--- INI BAGIAN PENTINGNYA (Kirim email ke Google)
             guru: document.getElementById('guru').value,
             mapel: document.getElementById('mapel').value,
             kelas: document.getElementById('kelas').value,
@@ -183,6 +200,8 @@
             absensiData: []
         };
 
+        // ... (Kode selanjutnya SAMA persis, tidak perlu diubah) ...
+        
         // Ambil Checkbox Waktu
         document.querySelectorAll('input[name="waktu"]:checked').forEach(cb => data.waktu.push(cb.value));
 
@@ -197,7 +216,7 @@
             let reader = new FileReader();
             reader.readAsDataURL(fileInput.files[0]);
             reader.onload = function(e) {
-                data.fileData = reader.result.split(',')[1]; // Ambil base64 murni
+                data.fileData = reader.result.split(',')[1];
                 data.fileName = fileInput.files[0].name;
                 data.mimeType = fileInput.files[0].type;
                 
