@@ -389,13 +389,12 @@
         </div>
 
         <div class="input-group">
-    <label>Bukti KBM (Photo) <span style="font-weight:400; font-size: 0.8em; color: #94a3b8;">(Opsional)</span></label>
-    
-    <div class="input-wrapper">
-        <i class="fa-solid fa-camera"></i>
-        <input type="file" id="buktiKBM" class="form-control" accept="image/*" style="padding-top:12px">
-    </div>
-</div>
+            <label>Bukti KBM (Photo)</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-camera"></i>
+                <input type="file" id="buktiKBM" class="form-control" accept="image/*" required style="padding-top:12px">
+            </div>
+        </div>
 
         <div class="input-group">
             <label>Catatan</label>
@@ -514,30 +513,22 @@ media: Array.from(document.querySelectorAll('input[name="media_alat"]:checked'))
         });
 
         let fileInput = document.getElementById('buktiKBM');
-    
-    // Cek jika ada file dipilih
-    if (fileInput.files.length > 0) {
-        let reader = new FileReader();
-        reader.readAsDataURL(fileInput.files[0]);
-        reader.onload = function(e) {
-            // Isi data file jika ada
-            data.fileData = reader.result.split(',')[1];
-            data.fileName = fileInput.files[0].name;
-            data.mimeType = fileInput.files[0].type;
-            
-            // Kirim ke Google
-            kirimKeGoogle(data, btn);
+        if(fileInput.files.length > 0) {
+            let reader = new FileReader();
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = function(e) {
+                data.fileData = reader.result.split(',')[1];
+                data.fileName = fileInput.files[0].name;
+                data.mimeType = fileInput.files[0].type;
+                kirimKeGoogle(data, btn);
+            }
+        } else {
+            alert("Wajib upload Foto Bukti KBM!");
+            btn.innerHTML = "UPLOAD DATA 🚀";
+            btn.disabled = false;
         }
-    } else {
-        // JIKA TIDAK ADA FILE (KOSONG)
-        // Jangan di-alert, tapi isi data kosong agar script tidak error
-        data.fileData = "";
-        data.fileName = "";
-        data.mimeType = "";
-        
-        // Langsung kirim ke Google tanpa proses FileReader
-        kirimKeGoogle(data, btn);
     }
+
     function kirimKeGoogle(payload, btn) {
         fetch(SCRIPT_URL, {
             method: "POST",
