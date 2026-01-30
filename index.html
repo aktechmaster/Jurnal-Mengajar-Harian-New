@@ -144,7 +144,7 @@
         select.form-control {
             appearance: none;
             cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230284c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-image: ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230284c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 15px center;
             background-size: 16px;
@@ -427,6 +427,7 @@
 
 <script>
     // --- MASUKKAN URL GOOGLE SCRIPT ANDA DI SINI ---
+    // Pastikan URL ini adalah hasil DEPLOY TERBARU (New Version)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG4ZKJCOxEmjU12FaVpQ6szU9xvXJnAj4tNy4lpSlsq6FbMwo8doFme-UG-38V8x6D/exec"; 
 
     // 1. Load Data Awal
@@ -455,19 +456,23 @@
         });
     }
 
-    // --- EVENT LISTENER: CEK KUOTA SAAT GURU DIPILIH ---
+    // --- PERBAIKAN UTAMA DI SINI (Ganti google.script.run jadi fetch) ---
     document.getElementById('guru').addEventListener('change', function() {
         var namaGuru = this.value;
         var btn = document.getElementById('btnKirim');
         
+        if (!namaGuru) return;
+
         // 1. Ubah Tombol jadi Loading
         btn.disabled = true;
         btn.innerHTML = '<span class="loader"></span> MEMERIKSA JATAH...';
         btn.style.background = "#64748b"; // Warna abu-abu saat loading
 
-        // 2. Panggil Script "cekKuotaGuru" yang baru kita buat
-        google.script.run
-        .withSuccessHandler(function(hasil) {
+        // 2. Panggil Backend pakai FETCH (Bukan google.script.run)
+        fetch(SCRIPT_URL + "?action=cekKuota&nama=" + encodeURIComponent(namaGuru))
+        .then(res => res.json())
+        .then(hasil => {
+            console.log("Status Kuota:", hasil);
             
             // SKENARIO 1: Script Berhasil Jalan
             if (hasil.status === "SUKSES") {
@@ -476,7 +481,7 @@
                     // Masih punya jatah
                     btn.disabled = false;
                     btn.innerHTML = `UPLOAD DATA (Sisa: ${hasil.sisa}) <i class="fa-solid fa-rocket"></i>`;
-                    btn.style.background = ""; // Balik ke warna asli (Gradient Biru)
+                    btn.style.background = ""; // Balik ke warna asli
                     console.log("Jatah: " + hasil.jatah + ", Realisasi: " + hasil.realisasi);
                     
                 } else {
@@ -488,20 +493,19 @@
                 }
 
             } else {
-                // Nama tidak ditemukan atau Error lain dari logika
+                // Nama tidak ditemukan atau Error lain
                 btn.disabled = true;
                 btn.innerHTML = '⚠️ DATA TIDAK DITEMUKAN';
                 alert("Error: " + hasil.pesan);
             }
         })
-        .withFailureHandler(function(error) {
+        .catch(error => {
             // SKENARIO 2: Koneksi Gagal Total
             console.log(error);
             btn.disabled = false;
-            btn.innerHTML = '⚠️ ERROR KONEKSI (COBA LAGI)';
+            btn.innerHTML = '⚠️ ERROR KONEKSI';
             alert("Gagal menghubungi server database.");
-        })
-        .cekKuotaGuru(namaGuru); // Pemanggilan Fungsi Backend
+        });
     });
 
     // 2. Load Siswa
@@ -549,8 +553,8 @@
             kelas: document.getElementById('kelas').value,
             pertemuan: document.getElementById('pertemuan').value,
             // Mengambil semua media yang dicentang lalu digabung koma
-media: Array.from(document.querySelectorAll('input[name="media_alat"]:checked'))
-       .map(cb => cb.value).join(", ") || "-",
+            media: Array.from(document.querySelectorAll('input[name="media_alat"]:checked'))
+                   .map(cb => cb.value).join(", ") || "-",
             materi: document.getElementById('materi').value,
             kegiatan: document.getElementById('kegiatan').value,
             catatan: document.getElementById('catatan').value,
