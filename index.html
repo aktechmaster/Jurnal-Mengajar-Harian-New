@@ -553,38 +553,6 @@ media: Array.from(document.querySelectorAll('input[name="media_alat"]:checked'))
             btn.disabled = false;
         });
     }
-
-    // Daftarkan event listener pada select guru
-document.getElementById('guru').addEventListener('change', function() {
-    const namaGuru = this.value;
-    const btn = document.getElementById('btnKirim');
-    
-    // Nonaktifkan tombol sementara saat mengecek
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loader"></span> MENGECEK JATAH...';
-
-    // Panggil fungsi di kode.gs
-    google.script.run.withSuccessHandler(function(quota) {
-        if (quota.canInput) {
-            // Jika masih ada jatah
-            btn.disabled = false;
-            btn.innerHTML = 'UPLOAD DATA <i class="fa-solid fa-rocket"></i>';
-            btn.style.background = ""; // Reset ke warna biru standar
-            console.log("Sisa jatah: " + quota.sisa);
-        } else {
-            // Jika jatah sudah habis atau nol
-            btn.disabled = true;
-            btn.innerHTML = 'JATAH INPUT HABIS 🚫';
-            btn.style.background = "#94a3b8"; // Ubah jadi abu-abu
-            
-            if(quota.jatah === 0) {
-              alert("Maaf, Anda tidak memiliki jadwal mengajar (jatah input) untuk hari ini.");
-            } else {
-              alert("Batas Input Tercapai!\nAnda sudah mengisi " + quota.realisasi + " dari " + quota.jatah + " jurnal hari ini.");
-            }
-        }
-    }).checkUserQuota(namaGuru);
-});
 </script>
 
 </body>
